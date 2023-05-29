@@ -2,6 +2,8 @@ package com.group.libraryapp.controller.user;
 
 import com.group.libraryapp.domain.User;
 import com.group.libraryapp.dto.user.request.UserCreateRequest;
+import com.group.libraryapp.dto.user.response.UserResponse;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +16,22 @@ public class UserController {
 
     private final List<User> users = new ArrayList<>();
 
+    // 1. POST : 회원(USER) 추가
     @PostMapping("/user")
     public void saveUser(@RequestBody UserCreateRequest request){
         users.add(new User(request.getName(), request.getAge()));
     }
+
+    // 2. GET : 전체 회원 조회
+    // response를 담을 LIST 만들기 -> LIST에 USER 정보 담기 -> response 출력
+    @GetMapping("/user")
+    public List<UserResponse> getUsers() {
+        List<UserResponse> responses = new ArrayList<>();
+        for(int i = 0; i< users.size();i++)
+        {
+            responses.add(new UserResponse(i+1, users.get(i)));
+        }
+        return responses;
+    }
+
 }
