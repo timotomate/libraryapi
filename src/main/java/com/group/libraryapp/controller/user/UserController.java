@@ -2,13 +2,11 @@ package com.group.libraryapp.controller.user;
 
 import com.group.libraryapp.domain.User;
 import com.group.libraryapp.dto.user.request.UserCreateRequest;
+import com.group.libraryapp.dto.user.request.UserUpdateRequest;
 import com.group.libraryapp.dto.user.response.UserResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -38,8 +36,6 @@ public class UserController {
     }
 
     // 2. GET : 전체 회원 조회
-    // response를 담을 LIST 만들기 -> LIST에 USER 정보 담기 -> response 출력
-    // MySQL 명령어 사용하기
     @GetMapping("/user")
     public List<UserResponse> getUsers() {
         String sql = "SELECT * FROM user";
@@ -50,7 +46,27 @@ public class UserController {
             return new UserResponse(id, name, age);
         });
     }
+    @PutMapping("/user")
+    public void updateUser(@RequestBody UserUpdateRequest request) {
+        String readSql = "SELECT * FROM user WHERE id = ?"; // id를 기준으로 user가 존재하는지 1차 확인
+        boolean isUserNotExist = jdbcTemplate.query(readSql, (rs, rowNum) -> 0, request.getId()).isEmpty(); //SQL을 날려서 DB에 데이터가 있는지 확인
+        if (isUserNotExist) {
+            throw new IllegalArgumentException();
+        }
 
+        String sql = "UPDATE user set name = ? WHERE id = ?";
+        jdbcTemplate.update(sql, request.getName(), request.getId());
+    }
+
+    @DeleteMapping("/user")
+    public  void deleteUser(@RequestParam String name) {
+        String sql = "DELETE FROM user WHERE name = ?";
+        jdbcTemplate.update(sql, name);
+    }
+
+
+
+    // response를 담을 LIST 만들기 -> LIST에 USER 정보 담기 -> response 출력
 //        List<UserResponse> responses = new ArrayList<>();
 //        for(int i = 0; i< users.size();i++)
 //        {
