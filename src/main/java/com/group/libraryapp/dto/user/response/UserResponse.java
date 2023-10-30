@@ -43,5 +43,4 @@ public class UserResponse {
         this.age = age;
     }
 
-
 }

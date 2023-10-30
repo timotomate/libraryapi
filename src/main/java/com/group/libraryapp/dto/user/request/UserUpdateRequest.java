@@ -3,6 +3,7 @@ package com.group.libraryapp.dto.user.request;
 public class UserUpdateRequest {
 
     private long id;
+    private String name;
 
     public long getId() {
         return id;
@@ -19,8 +20,5 @@ public class UserUpdateRequest {
     public void setName(String name) {
         this.name = name;
     }
-
-    private String name;
-
 
 }

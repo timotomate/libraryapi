@@ -24,7 +24,6 @@ public class UserController {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
     // 1. POST : 회원(USER) 추가
     @PostMapping("/user")
     public void saveUser(@RequestBody UserCreateRequest request){
@@ -46,6 +45,8 @@ public class UserController {
             return new UserResponse(id, name, age);
         });
     }
+    
+    // 3. Put : 회원 추가
     @PutMapping("/user")
     public void updateUser(@RequestBody UserUpdateRequest request) {
         String readSql = "SELECT * FROM user WHERE id = ?"; // id를 기준으로 user가 존재하는지 1차 확인
@@ -57,13 +58,13 @@ public class UserController {
         String sql = "UPDATE user set name = ? WHERE id = ?";
         jdbcTemplate.update(sql, request.getName(), request.getId());
     }
-
+    
+    //4. Delete : 회원 삭제
     @DeleteMapping("/user")
     public  void deleteUser(@RequestParam String name) {
         String sql = "DELETE FROM user WHERE name = ?";
         jdbcTemplate.update(sql, name);
     }
-
 
 
     // response를 담을 LIST 만들기 -> LIST에 USER 정보 담기 -> response 출력
