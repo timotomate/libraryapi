@@ -67,7 +67,9 @@ public class UserController {
     }
 
 
-    // response를 담을 LIST 만들기 -> LIST에 USER 정보 담기 -> response 출력
+     // response를 담을 LIST 만들기 -> LIST에 USER 정보 담기 -> response 출력
+//    private final List<User> users = new ArrayList<>();
+//    public List<UserResponse> getUsers() {
 //        List<UserResponse> responses = new ArrayList<>();
 //        for(int i = 0; i< users.size();i++)
 //        {
