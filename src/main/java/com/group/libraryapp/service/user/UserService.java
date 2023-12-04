@@ -2,19 +2,49 @@
 
 package com.group.libraryapp.service.user;
 
+import com.group.libraryapp.dto.user.request.UserCreateRequest;
 import com.group.libraryapp.dto.user.request.UserUpdateRequest;
+import com.group.libraryapp.dto.user.response.UserResponse;
 import com.group.libraryapp.repository.user.UserRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.List;
+
 public class UserService {
 
-    private final UserRepository userRepository = new UserRepository();
+    // private final UserRepository userRepository = new UserRepository();
+    private final UserRepository userRepository;
+    public UserService(JdbcTemplate jdbcTemplate) {
+        userRepository = new UserRepository(jdbcTemplate);
+    }
 
-    // 1. 일단 update 하려는 항목이 있는지 부터 먼저 확인
-    public void updateUser(JdbcTemplate jdbcTemplate, UserUpdateRequest request) {
-        if (userRepository.isUserNotExist(jdbcTemplate, request.getId())) {
+    // 1. Create(POST)
+    public void saveUser(UserCreateRequest request){
+        userRepository.saveUser(request.getName(), request.getAge());
+    }
+
+    // 2. Read(GET)
+    public List<UserResponse> getUsers() {
+        return userRepository.getUsers();
+    }
+
+    // 3. Update(PUT)
+    public void updateUser(UserUpdateRequest request) {
+        if (userRepository.isUserNotExist(request.getId())) {
             throw new IllegalArgumentException();
         }
-        userRepository.updateUserName(jdbcTemplate, request.getName(), request.getId());
+        userRepository.updateUserName(request.getName(), request.getId());
     }
+
+    // 4. Delete(DELETE)
+    public void deleteUser(String name) {
+        if (userRepository.isUserNotExist(name)){
+            throw new IllegalArgumentException();
+        }
+        userRepository.deleteUser(name);
+    }
+
+
+
+
 }

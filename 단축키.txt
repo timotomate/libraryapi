@@ -1,0 +1,4 @@
+Ctrl + Shift + o = 함수 import 한꺼번에 정리
+Alt + Insert = Getter/Setter/생성자 등등 만들기
+Ctrl + Insert = 한 줄 드래그
+Ctrl + E = 최근 파일
