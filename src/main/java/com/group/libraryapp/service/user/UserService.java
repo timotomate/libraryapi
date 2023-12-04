@@ -1,18 +1,20 @@
+// Service의 역할 -> 비즈니스 로직. 실제 연산이라고 보면 됨(메서드).
+
 package com.group.libraryapp.service.user;
 
 import com.group.libraryapp.dto.user.request.UserUpdateRequest;
+import com.group.libraryapp.repository.user.UserRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class UserService {
 
+    private final UserRepository userRepository = new UserRepository();
+
+    // 1. 일단 update 하려는 항목이 있는지 부터 먼저 확인
     public void updateUser(JdbcTemplate jdbcTemplate, UserUpdateRequest request) {
-        String readSql = "SELECT * FROM user WHERE id = ?"; // id를 기준으로 user가 존재하는지 1차 확인
-        boolean isUserNotExist = jdbcTemplate.query(readSql, (rs, rowNum) -> 0, request.getId()).isEmpty(); //SQL을 날려서 DB에 데이터가 있는지 확인
-        if (isUserNotExist) {
+        if (userRepository.isUserNotExist(jdbcTemplate, request.getId())) {
             throw new IllegalArgumentException();
         }
-
-        String sql = "UPDATE user set name = ? WHERE id = ?";
-        jdbcTemplate.update(sql, request.getName(), request.getId());
+        userRepository.updateUserName(jdbcTemplate, request.getName(), request.getId());
     }
 }
