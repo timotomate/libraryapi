@@ -1,4 +1,6 @@
 # Miscellaneous
+HELP.md
+gradle
 *.java.hsp
 *.sonarj
 *.sw*
